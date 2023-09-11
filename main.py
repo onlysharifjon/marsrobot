@@ -1,12 +1,13 @@
 import logging
-from aiogram import Bot, Dispatcher, types
-from aiogram.contrib.middlewares.logging import LoggingMiddleware
-from aiogram.types import ParseMode
-from defaullt.inline import language, who
+
 import openpyxl
+from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
+
+from defaullt.inline import language, who
 
 # Your Telegram API token
 TOKEN = '6673206703:AAGelZ4-f98Lamr_WdwLMQTY6l6dDcWVUhM'
@@ -29,19 +30,20 @@ class Mars(StatesGroup):
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
     await message.answer(
-        "Mars botiga xush kelibsiz! Iltimos, Til tanlang,\n\nДобро пожаловать в Mars Bot! Пожалуйста, выберите язык\n\nWelcome to Mars Bot! Please select a language",
+        "Mars botiga xush kelibsiz! Iltimos, Til tanlang,\n\nДобро пожаловать в Mars Bot! Пожалуйста, "
+        "выберите язык\n\nWelcome to Mars Bot! Please select a language",
         reply_markup=language)
     await Mars.uzb_lang.set()
 
 
 @dp.callback_query_handler(text='Uzbek', state=Mars.uzb_lang)
-async def uzb_l(call: types.CallbackQuery, state: FSMContext):
+async def uzb_l(call: types.CallbackQuery):
     await call.message.delete()
     await call.message.answer('Iltimos, kimligingizni ko`rsating))', reply_markup=who)
 
 
 @dp.callback_query_handler(text='stud', state=Mars.uzb_lang)
-async def student_login(call: types.CallbackQuery, state: FSMContext):
+async def student_login(call: types.CallbackQuery):
     await call.message.answer('Modme id ni kiriting: ')
     await Mars.modme.set()
 
@@ -51,8 +53,8 @@ async def texter(message: types.Message, state: FSMContext):
     id_student = message.text
     print(id_student)
     # all values B2 in excel file
-    wb = openpyxl.load_workbook('students.xlsx','rb')
-    #activate workbook
+    wb = openpyxl.load_workbook('students.xlsx', 'rb')
+    # activate workbook
 
     sheet = wb['Sheet1']
     users = []
@@ -68,7 +70,6 @@ async def texter(message: types.Message, state: FSMContext):
             break
 
 
-# Start the bot
 if __name__ == '__main__':
     from aiogram import executor
 
