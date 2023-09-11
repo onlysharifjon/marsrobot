@@ -66,8 +66,30 @@ async def texter(message: types.Message, state: FSMContext):
             print('True')
             await message.answer('Siz muvaffaqiyatli kirdingiz')
             print(users)
-            await state.finish()
-            break
+            bolakaylar = []
+
+            for k in range(2, sheet.max_row + 1):
+                _ = []
+                for p in range(1,5):
+
+                    _.append(sheet.cell(row=k, column=p).value)
+                    if _ not in bolakaylar:
+                        bolakaylar.append(_)
+            for t in bolakaylar:
+                if str(t[1]) == str(id_student):
+                    t.remove(0)
+                    t.append(1)
+            for j in bolakaylar:
+                print(j)
+
+
+
+
+
+
+
+            # await state.finish()
+            # break
 
 
 if __name__ == '__main__':
