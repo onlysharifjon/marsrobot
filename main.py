@@ -51,67 +51,68 @@ async def student_login(call: types.CallbackQuery):
 @dp.message_handler(content_types=types.ContentType.TEXT, state=Mars.modme)
 async def texter(message: types.Message, state: FSMContext):
     id_student = message.text
-    print(id_student)
+    # print(id_student)
     # all values B2 in excel file
     wb = openpyxl.load_workbook('students.xlsx', 'rb')
     # activate workbook
 
     sheet = wb['Sheet']
     users = []
-    print(True)
+
     for i in range(2, sheet.max_row + 1):
         users.append(sheet.cell(row=i, column=2).value)
-        print(users)
-        if int(id_student) in users:
 
-            bolakaylar = []
-            for k in range(2, sheet.max_row + 1):
-                _ = []
-                for p in range(1, 5):
+    if int(id_student) in users:
 
-                    _.append(sheet.cell(row=k, column=p).value)
-                    if _ not in bolakaylar:
-                        bolakaylar.append(_)
+        bolakaylar = []
+        for k in range(2, sheet.max_row + 1):
+            _ = []
+            for p in range(1, 5):
 
-            def adder():
-                for t in bolakaylar:
-                    if str(t[1]) == str(id_student):
-                        t.remove(0)
-                        t.append(1)
-                for j in bolakaylar:
-                    print(j)
+                _.append(sheet.cell(row=k, column=p).value)
+                if _ not in bolakaylar:
+                    bolakaylar.append(_)
 
-            count = 0
-            for sim in bolakaylar:
-                if sim[1] == int(id_student):
-                    if bolakaylar[count][-1] == 1:
-                        await message.answer('Bunday Akkaunt Oldin ro`yxatdan o`tgan')
-                        print(True)
-                    elif bolakaylar[count][-1] == 0:
-                        await message.answer('Muvaffaqiyatli kirdingiz')
-                        adder()
-                    else:
-                        await message.answer('Tizimda qandaydir nosozlik!')
-                    continue
+        async def adder():
+            for t in bolakaylar:
+                if str(t[1]) == str(id_student):
+                    t.remove(0)
+                    t.append(1)
+            # for j in bolakaylar:
+            #     print(j)
 
+        count = 0
+
+        for sim in bolakaylar:
+            if sim[1] == int(id_student):
+                print(count)
+                if bolakaylar[count] == 1:
+                    print(bolakaylar[count][-1])
+                    await message.answer('Bunday Akkaunt Oldin ro`yxatdan o`tgan')
+                elif bolakaylar[count][-1] == 0:
+                    await message.answer('Muvaffaqiyatli kirdingiz')
+                    await adder()
+                else:
+                    await message.answer('Tizimda qandaydir nosozlik!')
                 count += 1
 
-            # await state.finish()
-            # break
-            workbook = openpyxl.Workbook()
-            sheet = workbook.active
+        # await state.finish()
+        # break
+        workbook = openpyxl.Workbook()
+        sheet = workbook.active
 
-            sheet.cell(row=1, column=1, value="Ism")
-            sheet.cell(row=1, column=2, value="Modme_id")
-            sheet.cell(row=1, column=3, value="tel_nomer")
-            sheet.cell(row=1, column=4, value="device")
-            for i in range(2, len(bolakaylar) + 2):
-                for j in range(1, 5):
-                    sheet.cell(row=i, column=j, value=bolakaylar[i - 2][j - 1])
+        sheet.cell(row=1, column=1, value="Ism")
+        sheet.cell(row=1, column=2, value="Modme_id")
+        sheet.cell(row=1, column=3, value="tel_nomer")
+        sheet.cell(row=1, column=4, value="device")
+        for i in range(2, len(bolakaylar) + 2):
+            for j in range(1, 5):
+                sheet.cell(row=i, column=j, value=bolakaylar[i - 2][j - 1])
 
-            workbook.save("students.xlsx")
+        workbook.save("students.xlsx")
 
-            workbook.close()
+        workbook.close()
+        await state.finish()
 
 
 if __name__ == '__main__':
