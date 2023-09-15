@@ -10,7 +10,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from defaullt.inline import language, who
 
 # Your Telegram API token
-TOKEN = '6673206703:AAGelZ4-f98Lamr_WdwLMQTY6l6dDcWVUhM'
+TOKEN = '6413897264:AAEVQfyuP4Bw_UfsLEQoj-izuAFHe77VcvY'
 
 # Initialize the bot and dispatcher
 bot = Bot(token=TOKEN)
@@ -82,19 +82,17 @@ async def texter(message: types.Message, state: FSMContext):
             #     print(j)
 
         count = 0
-
         for sim in bolakaylar:
+            count += 1
+            print(count)
             if sim[1] == int(id_student):
-                print(count)
-                if bolakaylar[count] == 1:
-                    print(bolakaylar[count][-1])
+                if bolakaylar[count-1][-1] == 1:
                     await message.answer('Bunday Akkaunt Oldin ro`yxatdan o`tgan')
-                elif bolakaylar[count][-1] == 0:
+                elif bolakaylar[count-1][-1] == 0:
                     await message.answer('Muvaffaqiyatli kirdingiz')
                     await adder()
                 else:
                     await message.answer('Tizimda qandaydir nosozlik!')
-                count += 1
 
         # await state.finish()
         # break
