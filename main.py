@@ -10,7 +10,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from defaullt.inline import language, who
 
 # Your Telegram API token
-TOKEN = '6413897264:AAEVQfyuP4Bw_UfsLEQoj-izuAFHe77VcvY'
+TOKEN = '6514287083:AAF92CBSMQKpVXJM2gXwgSIfu7a5hceK5O0'
 
 # Initialize the bot and dispatcher
 bot = Bot(token=TOKEN)
@@ -24,6 +24,7 @@ dp.middleware.setup(LoggingMiddleware())
 class Mars(StatesGroup):
     uzb_lang = State()
     modme = State()
+
 
 
 # Echo handler
@@ -45,9 +46,10 @@ async def uzb_l(call: types.CallbackQuery):
 @dp.callback_query_handler(text='stud', state=Mars.uzb_lang)
 async def student_login(call: types.CallbackQuery):
     await call.message.answer('Modme id ni kiriting: ')
+    await call.message.delete()
     await Mars.modme.set()
 
-
+p = 0
 @dp.message_handler(content_types=types.ContentType.TEXT, state=Mars.modme)
 async def texter(message: types.Message, state: FSMContext):
     id_student = message.text
@@ -88,9 +90,12 @@ async def texter(message: types.Message, state: FSMContext):
             if sim[1] == int(id_student):
                 if bolakaylar[count-1][-1] == 1:
                     await message.answer('Bunday Akkaunt Oldin ro`yxatdan o`tgan')
+                    await Mars.uzb_lang.set()
                 elif bolakaylar[count-1][-1] == 0:
                     await message.answer('Muvaffaqiyatli kirdingiz')
+                    p = 1
                     await adder()
+
                 else:
                     await message.answer('Tizimda qandaydir nosozlik!')
 
@@ -110,7 +115,10 @@ async def texter(message: types.Message, state: FSMContext):
         workbook.save("students.xlsx")
 
         workbook.close()
-        await state.finish()
+        if p == 1:
+            await state.finish()
+    else:
+        await message.answer('Bunday foydalanuvchi topilmadi!')
 
 
 if __name__ == '__main__':
