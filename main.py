@@ -7,6 +7,7 @@ from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
+from defaullt.default import asosiy_menu
 from defaullt.inline import language, who
 
 # Your Telegram API token
@@ -19,12 +20,13 @@ logging.basicConfig(level=logging.INFO)
 
 # Middleware for logging
 dp.middleware.setup(LoggingMiddleware())
+DATABASE_DICT = {}
 
 
 class Mars(StatesGroup):
     uzb_lang = State()
     modme = State()
-
+    asosiy_men_state = State()
 
 
 # Echo handler
@@ -49,7 +51,10 @@ async def student_login(call: types.CallbackQuery):
     await call.message.delete()
     await Mars.modme.set()
 
+
 p = 0
+
+
 @dp.message_handler(content_types=types.ContentType.TEXT, state=Mars.modme)
 async def texter(message: types.Message, state: FSMContext):
     id_student = message.text
@@ -88,12 +93,14 @@ async def texter(message: types.Message, state: FSMContext):
             count += 1
             print(count)
             if sim[1] == int(id_student):
-                if bolakaylar[count-1][-1] == 1:
+                if bolakaylar[count - 1][-1] == 1:
                     await message.answer('Bunday Akkaunt Oldin ro`yxatdan o`tgan')
                     await Mars.uzb_lang.set()
-                elif bolakaylar[count-1][-1] == 0:
-                    await message.answer('Muvaffaqiyatli kirdingiz')
-                    p = 1
+                elif bolakaylar[count - 1][-1] == 0:
+                    await message.answer('Muvaffaqiyatli kirdingiz', reply_markup=asosiy_menu)
+                    DATABASE_DICT[message.from_user.id] = int(id_student)
+                    print(DATABASE_DICT)
+
                     await adder()
 
                 else:
@@ -101,22 +108,9 @@ async def texter(message: types.Message, state: FSMContext):
 
         # await state.finish()
         # break
-        workbook = openpyxl.Workbook()
-        sheet = workbook.active
 
-        sheet.cell(row=1, column=1, value="Ism")
-        sheet.cell(row=1, column=2, value="Modme_id")
-        sheet.cell(row=1, column=3, value="tel_nomer")
-        sheet.cell(row=1, column=4, value="device")
-        for i in range(2, len(bolakaylar) + 2):
-            for j in range(1, 5):
-                sheet.cell(row=i, column=j, value=bolakaylar[i - 2][j - 1])
-
-        workbook.save("students.xlsx")
-
-        workbook.close()
-        if p == 1:
-            await state.finish()
+        await state.finish()
+        await Mars.asosiy_men_state.set()
     else:
         await message.answer('Bunday foydalanuvchi topilmadi!')
 
