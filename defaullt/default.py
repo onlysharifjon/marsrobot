@@ -16,4 +16,4 @@ asosiy_menu = ReplyKeyboardMarkup(
     ]
 )
 
-#salom
+#salom1
