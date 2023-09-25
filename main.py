@@ -15,9 +15,9 @@ from defaullt.inline import language, who, important
 from defaullt.inline import language, who
 
 # Your Telegram API token
-TOKEN = '6514287083:AAF92CBSMQKpVXJM2gXwgSIfu7a5hceK5O0'
+TOKEN = '6413897264:AAEVQfyuP4Bw_UfsLEQoj-izuAFHe77VcvY'
 # Initialize the bot and dispatcher
-bot = Bot(token=TOKEN,parse_mode='HTML')
+bot = Bot(token=TOKEN, parse_mode='HTML')
 dp = Dispatcher(bot, storage=MemoryStorage())
 logging.basicConfig(level=logging.INFO)
 
@@ -75,7 +75,7 @@ async def texter(message: types.Message, state: FSMContext):
         users.append(sheet.cell(row=i, column=2).value)
 
     if int(id_student) in users:
-
+        global bolakaylar
         bolakaylar = []
         for k in range(2, sheet.max_row + 1):
             _ = []
@@ -123,8 +123,8 @@ async def texter(message: types.Message, state: FSMContext):
         await message.answer('Bunday foydalanuvchi topilmadi!')
 
 
-@dp.message_handler(text='🏫О школе',state=Mars.asosiy_men_state)
-async def profil(message:types.message,state:FSMContext):
+@dp.message_handler(text='🏫О школе', state=Mars.asosiy_men_state)
+async def profil(message: types.message, state: FSMContext):
     photo = open('defaullt/img.png', 'rb')
     await message.answer_photo(photo=photo)
     await message.answer('''
@@ -151,8 +151,7 @@ https://www.instagram.com/p/CxYJKchiR9x/
     ''')
 
 
-
-@dp.message_handler(text='💥Space shop',state=Mars.asosiy_men_state)
+@dp.message_handler(text='💥Space shop', state=Mars.asosiy_men_state)
 async def photo(message: types.Message):
     photos = [
         InputMediaPhoto(open('images/1photo.jpg', 'rb'),),
@@ -167,11 +166,21 @@ async def photo(message: types.Message):
         InputMediaPhoto(open('images/10photo.jpg', 'rb')),
     ]
     await message.answer_media_group(media=photos)
-    await message.answer('Выберите приз',reply_markup=important)
+    await message.answer('Выберите приз', reply_markup=important)
 
 
+@dp.message_handler(text='👨‍🎓Профиль', state=Mars.asosiy_men_state)
+async def profil(message: types.Message):
+    id_profil = message.from_user.id
+    modme_id = DATABASE_DICT.get(id_profil)
+    for acc in bolakaylar:
+        if acc[1] == modme_id:
+            await message.answer(acc)
+        else:
+            print("error")
 
-#yangisi
+
+# yangisi
 
 
 if __name__ == '__main__':
