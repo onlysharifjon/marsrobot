@@ -6,15 +6,15 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.types import InputMediaPhoto
 
 from defaullt.default import asosiy_menu
-from defaullt.inline import language, who
+from defaullt.inline import language, who, important
 
 # Your Telegram API token
 TOKEN = '6514287083:AAF92CBSMQKpVXJM2gXwgSIfu7a5hceK5O0'
-
 # Initialize the bot and dispatcher
-bot = Bot(token=TOKEN)
+bot = Bot(token=TOKEN,parse_mode='HTML')
 dp = Dispatcher(bot, storage=MemoryStorage())
 logging.basicConfig(level=logging.INFO)
 
@@ -27,6 +27,7 @@ class Mars(StatesGroup):
     uzb_lang = State()
     modme = State()
     asosiy_men_state = State()
+    space_shop = State()
 
 
 # Echo handler
@@ -99,6 +100,8 @@ async def texter(message: types.Message, state: FSMContext):
                 elif bolakaylar[count - 1][-1] == 0:
                     await message.answer('Muvaffaqiyatli kirdingiz', reply_markup=asosiy_menu)
                     DATABASE_DICT[message.from_user.id] = int(id_student)
+                    await state.finish()
+                    await Mars.asosiy_men_state.set()
                     print(DATABASE_DICT)
 
                     await adder()
@@ -113,6 +116,57 @@ async def texter(message: types.Message, state: FSMContext):
         await Mars.asosiy_men_state.set()
     else:
         await message.answer('Bunday foydalanuvchi topilmadi!')
+
+
+@dp.message_handler(text='🏫О школе',state=Mars.asosiy_men_state)
+async def profil(message:types.message,state:FSMContext):
+    photo = open('defaullt/img.png', 'rb')
+    await message.answer_photo(photo=photo)
+    await message.answer('''
+    👨🏻‍💻 Hamma kasb yaxshi, xavfsizi undan yaxshi!
+
+Havola orqali o’ting va videoni tomosha qiling:
+https://www.instagram.com/p/CxYJKchiR9x/
+
+
+🥊 Boks sport turini sevuvchi har bir odam, hayotida bir marotaba bo'lsa ham professional bokschi bo'lishni orzu qilgan, lekin bu sport har birimizga ham to’g'ri kelmaydi. «Mars IT School» sizning farzandingiz hayotiga kamroq xavf tug’diradigan va zamonaviy kasblarni qulay hamda qiziqarli holda taqdim etib, kelajakda o’z kasbining egasi bo'lishiga yordam beradi.
+
+🤝 Tanlovda adashmang, farzandingiz uchun hozirdan mustahkam poydevor quring!
+
+<a href="https://t.me/Mars_yunusobod">📩 Yunusobod filiali</a>
+<a href="https://t.me/Mars_tinchlik">📩 Tinchlik filiali</a>
+<a href="https://t.me/Mars_Qutbiniso">📩 Chilonzor-Qutbiniso filialil;</a>
+<a href="https://t.me/Mars_chilonzor18">📩 Chilonzor 18 filiali</a>
+
+<b>👇🏻 Hoziroq izohlarda "+" belgisini qoldiring va biz siz bilan bog'lanamiz!</b>
+
+<b>«Mars IT School» — bu kelajak!</b>
+
+<b>📞 78-777-77-57</b>
+    ''')
+
+
+
+@dp.message_handler(text='💥Space shop',state=Mars.asosiy_men_state)
+async def photo(message: types.Message):
+    photos = [
+        InputMediaPhoto(open('images/1photo.jpg', 'rb'),),
+        InputMediaPhoto(open('images/2photo.jpg', 'rb')),
+        InputMediaPhoto(open('images/3photo.jpg', 'rb')),
+        InputMediaPhoto(open('images/4photo.jpg', 'rb')),
+        InputMediaPhoto(open('images/5photo.jpg', 'rb')),
+        InputMediaPhoto(open('images/6photo.jpg', 'rb')),
+        InputMediaPhoto(open('images/7photo.jpg', 'rb')),
+        InputMediaPhoto(open('images/8photo.jpg', 'rb')),
+        InputMediaPhoto(open('images/9photo.jpg', 'rb')),
+        InputMediaPhoto(open('images/10photo.jpg', 'rb')),
+    ]
+    await message.answer_media_group(media=photos)
+    await message.answer('Выберите приз',reply_markup=important)
+
+
+
+
 
 
 if __name__ == '__main__':
