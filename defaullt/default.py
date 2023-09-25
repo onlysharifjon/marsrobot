@@ -14,4 +14,10 @@ asosiy_menu = ReplyKeyboardMarkup(
         ]
 
     ]
+<<<<<<< HEAD
 )
+=======
+)
+
+#salom1
+>>>>>>> 8df573efe78c78a400c19d088cb1b2f30955ecb0

@@ -9,7 +9,10 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import InputMediaPhoto
 
 from defaullt.default import asosiy_menu
+
 from defaullt.inline import language, who, important
+
+from defaullt.inline import language, who
 
 # Your Telegram API token
 TOKEN = '6514287083:AAF92CBSMQKpVXJM2gXwgSIfu7a5hceK5O0'
@@ -27,6 +30,7 @@ class Mars(StatesGroup):
     uzb_lang = State()
     modme = State()
     asosiy_men_state = State()
+
     space_shop = State()
 
 
@@ -100,6 +104,7 @@ async def texter(message: types.Message, state: FSMContext):
                 elif bolakaylar[count - 1][-1] == 0:
                     await message.answer('Muvaffaqiyatli kirdingiz', reply_markup=asosiy_menu)
                     DATABASE_DICT[message.from_user.id] = int(id_student)
+
                     await state.finish()
                     await Mars.asosiy_men_state.set()
                     print(DATABASE_DICT)
