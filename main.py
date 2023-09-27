@@ -30,8 +30,8 @@ class Mars(StatesGroup):
     uzb_lang = State()
     modme = State()
     asosiy_men_state = State()
-
     space_shop = State()
+    comment = State()
 
 
 # Echo handler
@@ -180,7 +180,18 @@ async def profil(message: types.Message):
             print("error")
 
 
-# yangisi
+@dp.message_handler(text="✍️Оставить отзив", state=Mars.asosiy_men_state)
+async def comment(message: types.Message, state=FSMContext):
+    await message.answer("Izox qoldiring")
+    await state.finish()
+    await Mars.comment.set()
+
+
+@dp.message_handler(state=Mars.comment)
+async def otziv(message: types.Message, state=FSMContext):
+    user_text = message.text
+    sharif_id = 5172746353
+    await bot.send_message(chat_id=sharif_id, text=user_text)
 
 
 if __name__ == '__main__':
