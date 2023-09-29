@@ -24,6 +24,14 @@ logging.basicConfig(level=logging.INFO)
 # Middleware for logging
 dp.middleware.setup(LoggingMiddleware())
 DATABASE_DICT = {}
+DATATBASE_COINS = {
+    642181: 1000,
+    457658: 1000,
+    335935: 1000,
+    564850: 1000,
+    359725: 1000,
+    336845: 1000,
+}
 
 
 class Mars(StatesGroup):
@@ -32,6 +40,7 @@ class Mars(StatesGroup):
     asosiy_men_state = State()
     space_shop = State()
     comment = State()
+    shop = State()
 
 
 # Echo handler
@@ -152,9 +161,9 @@ https://www.instagram.com/p/CxYJKchiR9x/
 
 
 @dp.message_handler(text='💥Space shop', state=Mars.asosiy_men_state)
-async def photo(message: types.Message):
+async def photo(message: types.Message, state: FSMContext):
     photos = [
-        InputMediaPhoto(open('images/1photo.jpg', 'rb'),),
+        InputMediaPhoto(open('images/1photo.jpg', 'rb'), ),
         InputMediaPhoto(open('images/2photo.jpg', 'rb')),
         InputMediaPhoto(open('images/3photo.jpg', 'rb')),
         InputMediaPhoto(open('images/4photo.jpg', 'rb')),
@@ -167,6 +176,22 @@ async def photo(message: types.Message):
     ]
     await message.answer_media_group(media=photos)
     await message.answer('Выберите приз', reply_markup=important)
+    await state.finish()
+    await Mars.shop.set()
+
+
+@dp.callback_query_handler(text="airpods", state=Mars.shop)
+async def aripods(call: types.CallbackQuery, state: FSMContext):
+    try:
+        mars_user = call.message.chat.id
+        modme_id = DATABASE_DICT.get(mars_user)
+        coin = DATATBASE_COINS.get(modme_id)
+        coin -= 559
+        DATATBASE_COINS[modme_id] = coin
+        print(DATATBASE_COINS)
+    except:
+        await call.message.answer("<b>sotuv amalga oshirilmadi</b>")
+
 
 
 @dp.message_handler(text='👨‍🎓Профиль', state=Mars.asosiy_men_state)
