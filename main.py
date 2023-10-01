@@ -172,6 +172,7 @@ async def photo(message: types.Message):
 
 
 #yangisi
+# man qaytim
 
 
 if __name__ == '__main__':
