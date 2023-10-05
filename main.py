@@ -63,14 +63,9 @@ p = 0
 @dp.message_handler(content_types=types.ContentType.TEXT, state=Mars.modme)
 async def texter(message: types.Message, state: FSMContext):
     id_student = message.text
-    # print(id_student)
-    # all values B2 in excel file
     wb = openpyxl.load_workbook('students.xlsx', 'rb')
-    # activate workbook
-
     sheet = wb['Sheet']
     users = []
-
     for i in range(2, sheet.max_row + 1):
         users.append(sheet.cell(row=i, column=2).value)
 
@@ -90,9 +85,6 @@ async def texter(message: types.Message, state: FSMContext):
                 if str(t[1]) == str(id_student):
                     t.remove(0)
                     t.append(1)
-            # for j in bolakaylar:
-            #     print(j)
-
         count = 0
         for sim in bolakaylar:
             count += 1
@@ -114,8 +106,6 @@ async def texter(message: types.Message, state: FSMContext):
                 else:
                     await message.answer('Tizimda qandaydir nosozlik!')
 
-        # await state.finish()
-        # break
 
         await state.finish()
         await Mars.asosiy_men_state.set()
